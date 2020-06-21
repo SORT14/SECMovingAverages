@@ -1,0 +1,53 @@
+df <- read.csv("sec_ma.csv")
+library(ggplot2)
+library(dplyr)
+
+
+team_colors <- c("Florida"="#0021A5",
+                 "Tennessee"="#FF8200",
+                 "Georgia"="#BA0C2F",
+                 "Auburn"="#F26522",
+                 "LSU"="#461D7C",
+                 "Mississippi State"="#660000",
+                 "Texas A&M"="#500000",
+                 "Alabama"="#A60C31",
+                 "Arkansas"="#9D2235",
+                 "Kentucky"="#0033A0",
+                 "Ole Miss"="#CE1126",
+                 "Missouri"="#C69214",
+                 "Missouri"="#2C2A29",
+                 "South Carolina"="#73000A",
+                 "Vanderbilt"="#A8996E")
+
+#Main plot
+ggplot(df, aes(x=year,y=avg, color=Team)) + 
+  geom_line(size=2) +
+  scale_color_manual(values = team_colors)+
+  theme_bw()+
+  theme(legend.position="bottom",legend.text=element_text(size=7),
+        legend.title = element_blank())+
+  ggtitle("4-yr Recruit Rating Moving Average, SEC 2012-2020")
+
+
+#or team vs other comparisons:
+team_Florida <- df %>% 
+  select(Team, year, avg) %>% 
+  filter(Team == "Florida")
+
+team_other <- df %>% 
+  select(Team, year, avg) %>% 
+  filter(Team != "Florida")
+
+
+
+#This kind of sequence allows to compare for smaller groups
+ggplot() +
+  geom_line(data = team_Florida, aes(x=year,y=avg), colour="#0021A5") +
+  geom_line(data = team_Georgia, aes(x=year,y=avg), colour = "#BA0C2F") +
+  geom_line(data = team_Alabama, aes(x=year,y=avg), colour = "#A60C31") +
+  geom_line(data = team_LSU, aes(x=year,y=avg), colour = "#FDD023") +
+  geom_line(data = team_TexasAM, aes(x=year,y=avg), colour = "#500000") +
+  geom_line(data = team_Tennessee, aes(x=year,y=avg), colour = "#FF8200") +
+  geom_line(data = team_Auburn, aes(x=year,y=avg), colour = "#F26522")+
+  theme_minimal()
+
